@@ -1,6 +1,7 @@
 using CsvHelper;
 using System.Globalization;
 using Google_Apps_Viewer.GoogleApps;
+using System.Text;
 
 namespace Google_Apps_Viewer
 {
@@ -8,7 +9,6 @@ namespace Google_Apps_Viewer
     {
         #region list of variables
         private List<GoogleApp> googleApps;
-        public static Dictionary<string, bool> IsFilterActive;
         #endregion
         public MainWindow()
         {
@@ -18,24 +18,15 @@ namespace Google_Apps_Viewer
             googleApps = LoadGoogleAps(csvPath);
             
             InitializeComponent();
-            InitializeActiveFilters();
             InitializeCategoryComboBox();
             InitializeRatingComboBoxes();
         }
 
-        public static void InitializeActiveFilters()
-        {
-            IsFilterActive = new Dictionary<string, bool>()
-            {
-                {"category", false },
-                {"nameContains",false },
-                {"ratingRange", false }
-            };
-        }
         public void InitializeCategoryComboBox()
         {
             categoryComboBox.Items.Add("");
-            var groupByCategory = googleApps.GroupBy(a => a.Category);
+            var groupByCategory = googleApps.GroupBy(a => a.Category)
+                .OrderBy(g => g.Key);//get alphabetical order as in Enum Category
             foreach(var group in groupByCategory)
             {
                 var apps = group.ToList();
@@ -48,13 +39,15 @@ namespace Google_Apps_Viewer
             comboBoxRatingFrom.Items.Add("");
             comboBoxRatingFrom.Items.Add("1");
             comboBoxRatingFrom.Items.Add("2");
+            comboBoxRatingFrom.Items.Add("2,5");
             comboBoxRatingTo.Items.Add("");
             comboBoxRatingTo.Items.Add("1");
             comboBoxRatingTo.Items.Add("2");
-            for(float f=1.1F; f<=5; f += 0.1F)
+            comboBoxRatingTo.Items.Add("2,5");
+            for (float f=3F; f<=5; f += 0.1F)
             {
-                comboBoxRatingFrom.Items.Add(Math.Round(f,2));
-                comboBoxRatingTo.Items.Add(Math.Round(f, 2));
+                comboBoxRatingFrom.Items.Add(Math.Round(f,2).ToString());
+                comboBoxRatingTo.Items.Add(Math.Round(f, 2).ToString());
             }
         }
 
@@ -112,39 +105,45 @@ namespace Google_Apps_Viewer
                     if (i > count)
                         break;
                 }
-            }           
+            }
+            labelRecordsCount.Text = apps.Count.ToString();
         }
 
         private List<GoogleApp> filterAppsByCategory()
         {
+            var result = googleApps;
             if (categoryComboBox.SelectedItem != null && categoryComboBox.SelectedIndex != 0)
             {
-                var selectedCategory = categoryComboBox.SelectedItem.ToString();
-                IsFilterActive["category"] = true;
-                return googleApps.Where(a => a.Category.ToString() == selectedCategory).ToList();
+                var selectedCategory = (Category)(categoryComboBox.SelectedIndex - 1);
+                
+                return result
+                    .Where(a => a.Category.ToString() == Enum.GetName(selectedCategory)).ToList();
             }
-            IsFilterActive["category"] = false;
-            return new List<GoogleApp>();
+            return result;
         }
         private List<GoogleApp> filterByNameContains(string pattern)
         {
+            var result = googleApps;
             if(pattern.Trim() != null && pattern != "")
             {
-                IsFilterActive["nameContains"] = true;
-                return googleApps.Where(a => a.Name.Contains(pattern)).ToList();
+                return result.Where(a => a.Name.Contains(pattern)).ToList();
             }
-            IsFilterActive["nameContains"] = false;
-            return new List<GoogleApp>();       
+            return result;       
         }
-        private List<GoogleApp> filterByRating()
+        private List<GoogleApp> filterByRating(string fromto)
         {
-            float ratingFrom = -1;
-            float ratingTo = -1;
-
+            float ratingFrom = 0;
+            float ratingTo = 0;
             List<GoogleApp> result = googleApps;
-            
-            IsFilterActive["ratingRange"] = false;
-            return new List<GoogleApp>();
+            if (fromto=="from" && float.TryParse(comboBoxRatingFrom.SelectedItem.ToString(), out ratingFrom))
+            {
+                result = result.Where(a => a.Rating >= ratingFrom).ToList();
+            }
+            if (fromto=="to" && float.TryParse(comboBoxRatingTo.SelectedItem.ToString(), out ratingTo))
+            {
+                result = result.Where(a => a.Rating <= ratingTo).ToList();
+            }
+            return result;
         }
 
         private void applyFilters_OnClick(object sender, EventArgs e)
@@ -152,18 +151,25 @@ namespace Google_Apps_Viewer
             dataGridView.Rows.Clear();
             List<GoogleApp> result = googleApps;
 
-            var categories = filterAppsByCategory();    
-            var names = filterByNameContains(textBoxName.Text);
-            var ratings = filterByRating();
+            var categories = 
+                (categoryComboBox.SelectedItem != null) ? filterAppsByCategory(): null;    
+            var names = 
+                (textBoxName.Text.Length > 0) ? filterByNameContains(textBoxName.Text) : null;
+            var ratingsFrom = 
+                (comboBoxRatingFrom.SelectedItem != null) ? filterByRating("from") : null;
+            var ratingsTo =
+                (comboBoxRatingTo.SelectedItem != null) ? filterByRating("to") : null;
 
-            if (IsFilterActive["category"])
+            if (categories != null)
                 result = categories.Intersect(result).ToList();
-            if (IsFilterActive["nameContains"])
+            if (names != null)
                 result = names.Intersect(result).ToList();
-            if (IsFilterActive["ratingRange"])
-                result = ratings.Intersect(result).ToList();
+            if (ratingsFrom != null)
+                result = ratingsFrom.Intersect(result).ToList();
+            if (ratingsTo != null)
+                result = ratingsTo.Intersect(result).ToList();
 
-            if(result.Count > 1000)
+            if (result.Count > 1000)
             {
                 MessageBox.Show("To many results. Showing first 1000.", "To many results",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);

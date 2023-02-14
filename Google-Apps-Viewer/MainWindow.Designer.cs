@@ -37,6 +37,8 @@
             this.TypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.filterPanel = new System.Windows.Forms.Panel();
+            this.labelRecordsCount = new System.Windows.Forms.Label();
+            this.labelRecordsFound = new System.Windows.Forms.Label();
             this.comboBoxRatingTo = new System.Windows.Forms.ComboBox();
             this.comboBoxRatingFrom = new System.Windows.Forms.ComboBox();
             this.labelRatingTo = new System.Windows.Forms.Label();
@@ -127,6 +129,8 @@
             // filterPanel
             // 
             this.filterPanel.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.filterPanel.Controls.Add(this.labelRecordsCount);
+            this.filterPanel.Controls.Add(this.labelRecordsFound);
             this.filterPanel.Controls.Add(this.comboBoxRatingTo);
             this.filterPanel.Controls.Add(this.comboBoxRatingFrom);
             this.filterPanel.Controls.Add(this.labelRatingTo);
@@ -142,12 +146,31 @@
             this.filterPanel.Size = new System.Drawing.Size(304, 450);
             this.filterPanel.TabIndex = 0;
             // 
+            // labelRecordsCount
+            // 
+            this.labelRecordsCount.AutoSize = true;
+            this.labelRecordsCount.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelRecordsCount.Location = new System.Drawing.Point(237, 407);
+            this.labelRecordsCount.Name = "labelRecordsCount";
+            this.labelRecordsCount.Size = new System.Drawing.Size(0, 17);
+            this.labelRecordsCount.TabIndex = 11;
+            // 
+            // labelRecordsFound
+            // 
+            this.labelRecordsFound.AutoSize = true;
+            this.labelRecordsFound.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelRecordsFound.Location = new System.Drawing.Point(139, 407);
+            this.labelRecordsFound.Name = "labelRecordsFound";
+            this.labelRecordsFound.Size = new System.Drawing.Size(103, 17);
+            this.labelRecordsFound.TabIndex = 10;
+            this.labelRecordsFound.Text = "Records found: ";
+            // 
             // comboBoxRatingTo
             // 
             this.comboBoxRatingTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRatingTo.FormattingEnabled = true;
             this.comboBoxRatingTo.IntegralHeight = false;
-            this.comboBoxRatingTo.Location = new System.Drawing.Point(245, 93);
+            this.comboBoxRatingTo.Location = new System.Drawing.Point(194, 93);
             this.comboBoxRatingTo.Name = "comboBoxRatingTo";
             this.comboBoxRatingTo.Size = new System.Drawing.Size(54, 23);
             this.comboBoxRatingTo.TabIndex = 9;
@@ -158,7 +181,7 @@
             this.comboBoxRatingFrom.FormattingEnabled = true;
             this.comboBoxRatingFrom.IntegralHeight = false;
             this.comboBoxRatingFrom.ItemHeight = 15;
-            this.comboBoxRatingFrom.Location = new System.Drawing.Point(121, 93);
+            this.comboBoxRatingFrom.Location = new System.Drawing.Point(94, 93);
             this.comboBoxRatingFrom.Name = "comboBoxRatingFrom";
             this.comboBoxRatingFrom.Size = new System.Drawing.Size(54, 23);
             this.comboBoxRatingFrom.TabIndex = 8;
@@ -167,11 +190,11 @@
             // 
             this.labelRatingTo.AutoSize = true;
             this.labelRatingTo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelRatingTo.Location = new System.Drawing.Point(180, 94);
+            this.labelRatingTo.Location = new System.Drawing.Point(162, 94);
             this.labelRatingTo.Name = "labelRatingTo";
-            this.labelRatingTo.Size = new System.Drawing.Size(62, 17);
+            this.labelRatingTo.Size = new System.Drawing.Size(21, 17);
             this.labelRatingTo.TabIndex = 7;
-            this.labelRatingTo.Text = "less than";
+            this.labelRatingTo.Text = "to";
             // 
             // labelRatingFrom
             // 
@@ -179,9 +202,9 @@
             this.labelRatingFrom.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labelRatingFrom.Location = new System.Drawing.Point(3, 94);
             this.labelRatingFrom.Name = "labelRatingFrom";
-            this.labelRatingFrom.Size = new System.Drawing.Size(115, 17);
+            this.labelRatingFrom.Size = new System.Drawing.Size(80, 17);
             this.labelRatingFrom.TabIndex = 5;
-            this.labelRatingFrom.Text = "Rating more than";
+            this.labelRatingFrom.Text = "Rating from";
             // 
             // textBoxName
             // 
@@ -202,7 +225,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(3, 424);
+            this.button1.Location = new System.Drawing.Point(3, 381);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(296, 23);
             this.button1.TabIndex = 2;
@@ -267,5 +290,7 @@
         private Label labelRatingFrom;
         private ComboBox comboBoxRatingTo;
         private ComboBox comboBoxRatingFrom;
+        private Label labelRecordsCount;
+        private Label labelRecordsFound;
     }
 }
