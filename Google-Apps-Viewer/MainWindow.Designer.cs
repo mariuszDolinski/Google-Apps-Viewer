@@ -1,6 +1,6 @@
 ﻿namespace Google_Apps_Viewer
 {
-    partial class MainWindow
+    partial class MainWindow : Form
     {
         /// <summary>
         ///  Required designer variable.
@@ -37,11 +37,15 @@
             this.TypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.filterPanel = new System.Windows.Forms.Panel();
+            this.comboBoxRatingTo = new System.Windows.Forms.ComboBox();
+            this.comboBoxRatingFrom = new System.Windows.Forms.ComboBox();
+            this.labelRatingTo = new System.Windows.Forms.Label();
+            this.labelRatingFrom = new System.Windows.Forms.Label();
+            this.textBoxName = new System.Windows.Forms.TextBox();
+            this.labelName = new System.Windows.Forms.Label();
             this.button1 = new System.Windows.Forms.Button();
             this.labelCategory = new System.Windows.Forms.Label();
             this.categoryComboBox = new System.Windows.Forms.ComboBox();
-            this.labelName = new System.Windows.Forms.Label();
-            this.textBoxName = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -123,6 +127,10 @@
             // filterPanel
             // 
             this.filterPanel.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.filterPanel.Controls.Add(this.comboBoxRatingTo);
+            this.filterPanel.Controls.Add(this.comboBoxRatingFrom);
+            this.filterPanel.Controls.Add(this.labelRatingTo);
+            this.filterPanel.Controls.Add(this.labelRatingFrom);
             this.filterPanel.Controls.Add(this.textBoxName);
             this.filterPanel.Controls.Add(this.labelName);
             this.filterPanel.Controls.Add(this.button1);
@@ -133,6 +141,64 @@
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new System.Drawing.Size(304, 450);
             this.filterPanel.TabIndex = 0;
+            // 
+            // comboBoxRatingTo
+            // 
+            this.comboBoxRatingTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRatingTo.FormattingEnabled = true;
+            this.comboBoxRatingTo.IntegralHeight = false;
+            this.comboBoxRatingTo.Location = new System.Drawing.Point(245, 93);
+            this.comboBoxRatingTo.Name = "comboBoxRatingTo";
+            this.comboBoxRatingTo.Size = new System.Drawing.Size(54, 23);
+            this.comboBoxRatingTo.TabIndex = 9;
+            // 
+            // comboBoxRatingFrom
+            // 
+            this.comboBoxRatingFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxRatingFrom.FormattingEnabled = true;
+            this.comboBoxRatingFrom.IntegralHeight = false;
+            this.comboBoxRatingFrom.ItemHeight = 15;
+            this.comboBoxRatingFrom.Location = new System.Drawing.Point(121, 93);
+            this.comboBoxRatingFrom.Name = "comboBoxRatingFrom";
+            this.comboBoxRatingFrom.Size = new System.Drawing.Size(54, 23);
+            this.comboBoxRatingFrom.TabIndex = 8;
+            // 
+            // labelRatingTo
+            // 
+            this.labelRatingTo.AutoSize = true;
+            this.labelRatingTo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelRatingTo.Location = new System.Drawing.Point(180, 94);
+            this.labelRatingTo.Name = "labelRatingTo";
+            this.labelRatingTo.Size = new System.Drawing.Size(62, 17);
+            this.labelRatingTo.TabIndex = 7;
+            this.labelRatingTo.Text = "less than";
+            // 
+            // labelRatingFrom
+            // 
+            this.labelRatingFrom.AutoSize = true;
+            this.labelRatingFrom.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelRatingFrom.Location = new System.Drawing.Point(3, 94);
+            this.labelRatingFrom.Name = "labelRatingFrom";
+            this.labelRatingFrom.Size = new System.Drawing.Size(115, 17);
+            this.labelRatingFrom.TabIndex = 5;
+            this.labelRatingFrom.Text = "Rating more than";
+            // 
+            // textBoxName
+            // 
+            this.textBoxName.Location = new System.Drawing.Point(111, 58);
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.Size = new System.Drawing.Size(188, 23);
+            this.textBoxName.TabIndex = 4;
+            // 
+            // labelName
+            // 
+            this.labelName.AutoSize = true;
+            this.labelName.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelName.Location = new System.Drawing.Point(3, 59);
+            this.labelName.Name = "labelName";
+            this.labelName.Size = new System.Drawing.Size(102, 17);
+            this.labelName.TabIndex = 3;
+            this.labelName.Text = "Name contains:";
             // 
             // button1
             // 
@@ -156,28 +222,12 @@
             // 
             // categoryComboBox
             // 
+            this.categoryComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.categoryComboBox.FormattingEnabled = true;
             this.categoryComboBox.Location = new System.Drawing.Point(74, 23);
             this.categoryComboBox.Name = "categoryComboBox";
             this.categoryComboBox.Size = new System.Drawing.Size(225, 23);
             this.categoryComboBox.TabIndex = 0;
-            // 
-            // labelName
-            // 
-            this.labelName.AutoSize = true;
-            this.labelName.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelName.Location = new System.Drawing.Point(3, 59);
-            this.labelName.Name = "labelName";
-            this.labelName.Size = new System.Drawing.Size(102, 17);
-            this.labelName.TabIndex = 3;
-            this.labelName.Text = "Name contains:";
-            // 
-            // textBoxName
-            // 
-            this.textBoxName.Location = new System.Drawing.Point(111, 58);
-            this.textBoxName.Name = "textBoxName";
-            this.textBoxName.Size = new System.Drawing.Size(188, 23);
-            this.textBoxName.TabIndex = 4;
             // 
             // MainWindow
             // 
@@ -213,5 +263,9 @@
         private ComboBox categoryComboBox;
         private Label labelName;
         private TextBox textBoxName;
+        private Label labelRatingTo;
+        private Label labelRatingFrom;
+        private ComboBox comboBoxRatingTo;
+        private ComboBox comboBoxRatingFrom;
     }
 }

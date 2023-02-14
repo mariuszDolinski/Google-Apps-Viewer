@@ -12,15 +12,15 @@ namespace Google_Apps_Viewer
         #endregion
         public MainWindow()
         {
-            InitializeComponent();
-            InitializeActiveFilters();
-            //adding categories to comboBox
-            categoryComboBox.Items.Add("");
-            categoryComboBox.Items.AddRange(Enum.GetNames(typeof(Category)));
             //creating GoogleApp object from csv file
             var currentDir = Directory.GetCurrentDirectory();
             var csvPath = Path.GetRelativePath(currentDir, "GoogleApps/googleplaystore.csv");
             googleApps = LoadGoogleAps(csvPath);
+            
+            InitializeComponent();
+            InitializeActiveFilters();
+            InitializeCategoryComboBox();
+            InitializeRatingComboBoxes();
         }
 
         public static void InitializeActiveFilters()
@@ -28,8 +28,34 @@ namespace Google_Apps_Viewer
             IsFilterActive = new Dictionary<string, bool>()
             {
                 {"category", false },
-                {"nameContains",false }
+                {"nameContains",false },
+                {"ratingRange", false }
             };
+        }
+        public void InitializeCategoryComboBox()
+        {
+            categoryComboBox.Items.Add("");
+            var groupByCategory = googleApps.GroupBy(a => a.Category);
+            foreach(var group in groupByCategory)
+            {
+                var apps = group.ToList();
+                categoryComboBox.Items.Add(Enum.GetName(group.Key) + " ("
+                    + group.Count(g => true) + ")");
+            }
+        }
+        public void InitializeRatingComboBoxes()
+        {
+            comboBoxRatingFrom.Items.Add("");
+            comboBoxRatingFrom.Items.Add("1");
+            comboBoxRatingFrom.Items.Add("2");
+            comboBoxRatingTo.Items.Add("");
+            comboBoxRatingTo.Items.Add("1");
+            comboBoxRatingTo.Items.Add("2");
+            for(float f=1.1F; f<=5; f += 0.1F)
+            {
+                comboBoxRatingFrom.Items.Add(Math.Round(f,2));
+                comboBoxRatingTo.Items.Add(Math.Round(f, 2));
+            }
         }
 
         /// <summary>
@@ -110,6 +136,16 @@ namespace Google_Apps_Viewer
             IsFilterActive["nameContains"] = false;
             return new List<GoogleApp>();       
         }
+        private List<GoogleApp> filterByRating()
+        {
+            float ratingFrom = -1;
+            float ratingTo = -1;
+
+            List<GoogleApp> result = googleApps;
+            
+            IsFilterActive["ratingRange"] = false;
+            return new List<GoogleApp>();
+        }
 
         private void applyFilters_OnClick(object sender, EventArgs e)
         {
@@ -118,11 +154,14 @@ namespace Google_Apps_Viewer
 
             var categories = filterAppsByCategory();    
             var names = filterByNameContains(textBoxName.Text);
+            var ratings = filterByRating();
 
             if (IsFilterActive["category"])
                 result = categories.Intersect(result).ToList();
             if (IsFilterActive["nameContains"])
                 result = names.Intersect(result).ToList();
+            if (IsFilterActive["ratingRange"])
+                result = ratings.Intersect(result).ToList();
 
             if(result.Count > 1000)
             {
