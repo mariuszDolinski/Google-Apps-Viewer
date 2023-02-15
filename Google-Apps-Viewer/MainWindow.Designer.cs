@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.dataGridView = new System.Windows.Forms.DataGridView();
+            this.ColumnNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.CategoryCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.RatingCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -37,6 +38,9 @@
             this.TypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.filterPanel = new System.Windows.Forms.Panel();
+            this.labelPageNumber = new System.Windows.Forms.Label();
+            this.buttonPrevPage = new System.Windows.Forms.Button();
+            this.buttonNextPage = new System.Windows.Forms.Button();
             this.labelRecordsCount = new System.Windows.Forms.Label();
             this.labelRecordsFound = new System.Windows.Forms.Label();
             this.comboBoxRatingTo = new System.Windows.Forms.ComboBox();
@@ -45,7 +49,7 @@
             this.labelRatingFrom = new System.Windows.Forms.Label();
             this.textBoxName = new System.Windows.Forms.TextBox();
             this.labelName = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
+            this.applyFiltersButton = new System.Windows.Forms.Button();
             this.labelCategory = new System.Windows.Forms.Label();
             this.categoryComboBox = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
@@ -60,6 +64,7 @@
             // 
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.ColumnNo,
             this.NameCol,
             this.CategoryCol,
             this.RatingCol,
@@ -70,8 +75,14 @@
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
             this.dataGridView.RowTemplate.Height = 25;
-            this.dataGridView.Size = new System.Drawing.Size(691, 450);
+            this.dataGridView.Size = new System.Drawing.Size(723, 427);
             this.dataGridView.TabIndex = 1;
+            // 
+            // ColumnNo
+            // 
+            this.ColumnNo.HeaderText = "No.";
+            this.ColumnNo.Name = "ColumnNo";
+            this.ColumnNo.Width = 50;
             // 
             // NameCol
             // 
@@ -121,14 +132,17 @@
             // splitContainer.Panel2
             // 
             this.splitContainer.Panel2.Controls.Add(this.dataGridView);
-            this.splitContainer.Size = new System.Drawing.Size(996, 450);
-            this.splitContainer.SplitterDistance = 304;
+            this.splitContainer.Size = new System.Drawing.Size(1045, 427);
+            this.splitContainer.SplitterDistance = 321;
             this.splitContainer.SplitterWidth = 1;
             this.splitContainer.TabIndex = 2;
             // 
             // filterPanel
             // 
             this.filterPanel.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.filterPanel.Controls.Add(this.labelPageNumber);
+            this.filterPanel.Controls.Add(this.buttonPrevPage);
+            this.filterPanel.Controls.Add(this.buttonNextPage);
             this.filterPanel.Controls.Add(this.labelRecordsCount);
             this.filterPanel.Controls.Add(this.labelRecordsFound);
             this.filterPanel.Controls.Add(this.comboBoxRatingTo);
@@ -137,20 +151,50 @@
             this.filterPanel.Controls.Add(this.labelRatingFrom);
             this.filterPanel.Controls.Add(this.textBoxName);
             this.filterPanel.Controls.Add(this.labelName);
-            this.filterPanel.Controls.Add(this.button1);
+            this.filterPanel.Controls.Add(this.applyFiltersButton);
             this.filterPanel.Controls.Add(this.labelCategory);
             this.filterPanel.Controls.Add(this.categoryComboBox);
             this.filterPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.filterPanel.Location = new System.Drawing.Point(0, 0);
             this.filterPanel.Name = "filterPanel";
-            this.filterPanel.Size = new System.Drawing.Size(304, 450);
+            this.filterPanel.Size = new System.Drawing.Size(321, 427);
             this.filterPanel.TabIndex = 0;
+            // 
+            // labelPageNumber
+            // 
+            this.labelPageNumber.AutoSize = true;
+            this.labelPageNumber.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelPageNumber.Location = new System.Drawing.Point(121, 396);
+            this.labelPageNumber.Name = "labelPageNumber";
+            this.labelPageNumber.Size = new System.Drawing.Size(42, 17);
+            this.labelPageNumber.TabIndex = 14;
+            this.labelPageNumber.Text = "Page ";
+            // 
+            // buttonPrevPage
+            // 
+            this.buttonPrevPage.Location = new System.Drawing.Point(3, 394);
+            this.buttonPrevPage.Name = "buttonPrevPage";
+            this.buttonPrevPage.Size = new System.Drawing.Size(88, 23);
+            this.buttonPrevPage.TabIndex = 13;
+            this.buttonPrevPage.Text = "<<<";
+            this.buttonPrevPage.UseVisualStyleBackColor = true;
+            this.buttonPrevPage.Click += new System.EventHandler(this.prevPageButton_OnClick);
+            // 
+            // buttonNextPage
+            // 
+            this.buttonNextPage.Location = new System.Drawing.Point(211, 394);
+            this.buttonNextPage.Name = "buttonNextPage";
+            this.buttonNextPage.Size = new System.Drawing.Size(88, 23);
+            this.buttonNextPage.TabIndex = 12;
+            this.buttonNextPage.Text = ">>>";
+            this.buttonNextPage.UseVisualStyleBackColor = true;
+            this.buttonNextPage.Click += new System.EventHandler(this.nextPageButton_OnClick);
             // 
             // labelRecordsCount
             // 
             this.labelRecordsCount.AutoSize = true;
             this.labelRecordsCount.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelRecordsCount.Location = new System.Drawing.Point(237, 407);
+            this.labelRecordsCount.Location = new System.Drawing.Point(237, 371);
             this.labelRecordsCount.Name = "labelRecordsCount";
             this.labelRecordsCount.Size = new System.Drawing.Size(0, 17);
             this.labelRecordsCount.TabIndex = 11;
@@ -159,7 +203,7 @@
             // 
             this.labelRecordsFound.AutoSize = true;
             this.labelRecordsFound.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelRecordsFound.Location = new System.Drawing.Point(139, 407);
+            this.labelRecordsFound.Location = new System.Drawing.Point(139, 371);
             this.labelRecordsFound.Name = "labelRecordsFound";
             this.labelRecordsFound.Size = new System.Drawing.Size(103, 17);
             this.labelRecordsFound.TabIndex = 10;
@@ -170,7 +214,7 @@
             this.comboBoxRatingTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRatingTo.FormattingEnabled = true;
             this.comboBoxRatingTo.IntegralHeight = false;
-            this.comboBoxRatingTo.Location = new System.Drawing.Point(194, 93);
+            this.comboBoxRatingTo.Location = new System.Drawing.Point(201, 93);
             this.comboBoxRatingTo.Name = "comboBoxRatingTo";
             this.comboBoxRatingTo.Size = new System.Drawing.Size(54, 23);
             this.comboBoxRatingTo.TabIndex = 9;
@@ -192,9 +236,9 @@
             this.labelRatingTo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.labelRatingTo.Location = new System.Drawing.Point(162, 94);
             this.labelRatingTo.Name = "labelRatingTo";
-            this.labelRatingTo.Size = new System.Drawing.Size(21, 17);
+            this.labelRatingTo.Size = new System.Drawing.Size(25, 17);
             this.labelRatingTo.TabIndex = 7;
-            this.labelRatingTo.Text = "to";
+            this.labelRatingTo.Text = " to";
             // 
             // labelRatingFrom
             // 
@@ -223,15 +267,15 @@
             this.labelName.TabIndex = 3;
             this.labelName.Text = "Name contains:";
             // 
-            // button1
+            // applyFiltersButton
             // 
-            this.button1.Location = new System.Drawing.Point(3, 381);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(296, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "Apply filters";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.applyFilters_OnClick);
+            this.applyFiltersButton.Location = new System.Drawing.Point(3, 343);
+            this.applyFiltersButton.Name = "applyFiltersButton";
+            this.applyFiltersButton.Size = new System.Drawing.Size(296, 23);
+            this.applyFiltersButton.TabIndex = 2;
+            this.applyFiltersButton.Text = "Apply filters";
+            this.applyFiltersButton.UseVisualStyleBackColor = true;
+            this.applyFiltersButton.Click += new System.EventHandler(this.applyFilters_OnClick);
             // 
             // labelCategory
             // 
@@ -256,7 +300,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(996, 450);
+            this.ClientSize = new System.Drawing.Size(1045, 427);
             this.Controls.Add(this.splitContainer);
             this.Name = "MainWindow";
             this.Text = "Google Apps Viewer";
@@ -273,15 +317,9 @@
 
         #endregion
         private DataGridView dataGridView;
-        private DataGridViewTextBoxColumn NameCol;
-        private DataGridViewTextBoxColumn CategoryCol;
-        private DataGridViewTextBoxColumn RatingCol;
-        private DataGridViewTextBoxColumn ReviewsCol;
-        private DataGridViewTextBoxColumn SizeCol;
-        private DataGridViewTextBoxColumn TypeCol;
         private SplitContainer splitContainer;
         private Panel filterPanel;
-        private Button button1;
+        private Button applyFiltersButton;
         private Label labelCategory;
         private ComboBox categoryComboBox;
         private Label labelName;
@@ -292,5 +330,15 @@
         private ComboBox comboBoxRatingFrom;
         private Label labelRecordsCount;
         private Label labelRecordsFound;
+        private Label labelPageNumber;
+        private Button buttonPrevPage;
+        private Button buttonNextPage;
+        private DataGridViewTextBoxColumn ColumnNo;
+        private DataGridViewTextBoxColumn NameCol;
+        private DataGridViewTextBoxColumn CategoryCol;
+        private DataGridViewTextBoxColumn RatingCol;
+        private DataGridViewTextBoxColumn ReviewsCol;
+        private DataGridViewTextBoxColumn SizeCol;
+        private DataGridViewTextBoxColumn TypeCol;
     }
 }

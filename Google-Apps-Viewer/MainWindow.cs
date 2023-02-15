@@ -9,6 +9,9 @@ namespace Google_Apps_Viewer
     {
         #region list of variables
         private List<GoogleApp> googleApps;
+        private List<GoogleApp> filteredApps;
+        private List<GoogleApp> currentPage;
+        private Pagination<GoogleApp> paginatedResults;
         #endregion
         public MainWindow()
         {
@@ -16,13 +19,20 @@ namespace Google_Apps_Viewer
             var currentDir = Directory.GetCurrentDirectory();
             var csvPath = Path.GetRelativePath(currentDir, "GoogleApps/googleplaystore.csv");
             googleApps = LoadGoogleAps(csvPath);
-            
+            filteredApps = googleApps;
+            paginatedResults = new Pagination<GoogleApp>();
+            currentPage = new List<GoogleApp>();
+
             InitializeComponent();
             InitializeCategoryComboBox();
             InitializeRatingComboBoxes();
+            SetPaginationInterface();
+
+            MinimumSize= new Size(Size.Width, Size.Height);
+            MaximumSize = new Size(Size.Width, Size.Height);
         }
 
-        public void InitializeCategoryComboBox()
+        private void InitializeCategoryComboBox()
         {
             categoryComboBox.Items.Add("");
             var groupByCategory = googleApps.GroupBy(a => a.Category)
@@ -34,7 +44,7 @@ namespace Google_Apps_Viewer
                     + group.Count(g => true) + ")");
             }
         }
-        public void InitializeRatingComboBoxes()
+        private void InitializeRatingComboBoxes()
         {
             comboBoxRatingFrom.Items.Add("");
             comboBoxRatingFrom.Items.Add("1");
@@ -49,6 +59,12 @@ namespace Google_Apps_Viewer
                 comboBoxRatingFrom.Items.Add(Math.Round(f,2).ToString());
                 comboBoxRatingTo.Items.Add(Math.Round(f, 2).ToString());
             }
+        }
+        private void SetPaginationInterface()
+        {
+            buttonNextPage.Enabled = false;
+            buttonPrevPage.Enabled = false;
+            labelPageNumber.Text = "";
         }
 
         /// <summary>
@@ -70,9 +86,10 @@ namespace Google_Apps_Viewer
         /// Add one app to dataGridView
         /// </summary>
         /// <param name="app">One record from of GoogleApp type</param>
-        private void DisplayApp(GoogleApp app)
+        private void DisplayApp(GoogleApp app, int index)
         {
             dataGridView.Rows.Add(
+                index,
                 app.Name, 
                 app.Category,
                 app.Rating,
@@ -86,27 +103,13 @@ namespace Google_Apps_Viewer
         /// <param name="apps">list of GoogleApps</param>
         /// <param name="count">number indicated how many apps should be displayed, 
         /// if 0 whole list is will be displayed</param>
-        private void DisplayApps(List<GoogleApp> apps, int count)
+        private void DisplayApps(List<GoogleApp> apps, int from)
         {
-            if(count == 0)
+            foreach (GoogleApp app in apps)
             {
-                foreach (GoogleApp app in apps)
-                {
-                    DisplayApp(app);
-                }
+                DisplayApp(app, from);
+                from++;
             }
-            else
-            {
-                int i = 1;
-                foreach (GoogleApp app in apps)
-                {
-                    DisplayApp(app);
-                    i++;
-                    if (i > count)
-                        break;
-                }
-            }
-            labelRecordsCount.Text = apps.Count.ToString();
         }
 
         private List<GoogleApp> filterAppsByCategory()
@@ -149,7 +152,7 @@ namespace Google_Apps_Viewer
         private void applyFilters_OnClick(object sender, EventArgs e)
         {
             dataGridView.Rows.Clear();
-            List<GoogleApp> result = googleApps;
+            filteredApps = googleApps;
 
             var categories = 
                 (categoryComboBox.SelectedItem != null) ? filterAppsByCategory(): null;    
@@ -161,24 +164,57 @@ namespace Google_Apps_Viewer
                 (comboBoxRatingTo.SelectedItem != null) ? filterByRating("to") : null;
 
             if (categories != null)
-                result = categories.Intersect(result).ToList();
+                filteredApps = categories.Intersect(filteredApps).ToList();
             if (names != null)
-                result = names.Intersect(result).ToList();
+                filteredApps = names.Intersect(filteredApps).ToList();
             if (ratingsFrom != null)
-                result = ratingsFrom.Intersect(result).ToList();
+                filteredApps = ratingsFrom.Intersect(filteredApps).ToList();
             if (ratingsTo != null)
-                result = ratingsTo.Intersect(result).ToList();
+                filteredApps = ratingsTo.Intersect(filteredApps).ToList();
 
-            if (result.Count > 1000)
+            labelRecordsCount.Text = filteredApps.Count.ToString();
+            paginatedResults.SetPagination(filteredApps, 15);
+            bool isPaginated = paginatedResults.IsPaginated();
+            if (!isPaginated)
             {
-                MessageBox.Show("To many results. Showing first 1000.", "To many results",
-                    MessageBoxButtons.OK, MessageBoxIcon.Information);
-                DisplayApps(result, 1000);
+                DisplayApps(filteredApps, 1);
+                labelPageNumber.Text = "Page: 1/1";
+                buttonNextPage.Enabled = false;
+                buttonPrevPage.Enabled = false;
             }
             else
             {
-                DisplayApps(result, 0);
+                currentPage = paginatedResults.CurrentPageResults(1);
+                DisplayApps(currentPage, 1);
+                buttonNextPage.Enabled = true;
+                buttonPrevPage.Enabled = false;
+                labelPageNumber.Text = $"Page: 1/{paginatedResults.TotalPages}";
             }
+        }
+        private void nextPageButton_OnClick(object sender, EventArgs e)
+        {
+            currentPage = paginatedResults.CurrentPageResults(paginatedResults.CurrentPage + 1);
+            dataGridView.Rows.Clear();
+            DisplayApps(currentPage, paginatedResults.From + 1);
+            if(paginatedResults.CurrentPage == paginatedResults.TotalPages)
+            {
+                buttonNextPage.Enabled = false;
+            }
+            buttonPrevPage.Enabled = true;
+            labelPageNumber.Text = $"Page: {paginatedResults.CurrentPage}/{paginatedResults.TotalPages}";
+        }
+
+        private void prevPageButton_OnClick(object sender, EventArgs e)
+        {
+            currentPage = paginatedResults.CurrentPageResults(paginatedResults.CurrentPage - 1);
+            dataGridView.Rows.Clear();
+            DisplayApps(currentPage, paginatedResults.From + 1);
+            if (paginatedResults.CurrentPage == 1)
+            {
+                buttonPrevPage.Enabled = false;
+            }
+            buttonNextPage.Enabled = true;
+            labelPageNumber.Text = $"Page: {paginatedResults.CurrentPage}/{paginatedResults.TotalPages}";
         }
     }
 }
