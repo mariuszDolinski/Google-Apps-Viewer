@@ -25,8 +25,10 @@ namespace Google_Apps_Viewer
 
             InitializeComponent();
             InitializeCategoryComboBox();
-            InitializeRatingComboBoxes();
+            InitializeComboBoxes();
             SetPaginationInterface();
+            labelMinReviewsError.Visible = false;
+            labelMaxReviewsError.Visible = false;
 
             MinimumSize= new Size(Size.Width, Size.Height);
             MaximumSize = new Size(Size.Width, Size.Height);
@@ -44,7 +46,7 @@ namespace Google_Apps_Viewer
                     + group.Count(g => true) + ")");
             }
         }
-        private void InitializeRatingComboBoxes()
+        private void InitializeComboBoxes()
         {
             comboBoxRatingFrom.Items.Add("");
             comboBoxRatingFrom.Items.Add("1");
@@ -59,6 +61,9 @@ namespace Google_Apps_Viewer
                 comboBoxRatingFrom.Items.Add(Math.Round(f,2).ToString());
                 comboBoxRatingTo.Items.Add(Math.Round(f, 2).ToString());
             }
+            comboBoxType.Items.Add("");
+            comboBoxType.Items.Add("Free");
+            comboBoxType.Items.Add("Paid");
         }
         private void SetPaginationInterface()
         {
@@ -112,15 +117,27 @@ namespace Google_Apps_Viewer
             }
         }
 
-        private List<GoogleApp> filterAppsByCategory()
+        private List<GoogleApp> filterByComboBox(string type)
         {
+            ComboBox comboBox;
+            if (type == "category") comboBox = categoryComboBox;
+            else comboBox = comboBoxType;
+
             var result = googleApps;
-            if (categoryComboBox.SelectedItem != null && categoryComboBox.SelectedIndex != 0)
+            if (comboBox.SelectedIndex != 0)
             {
-                var selectedCategory = (Category)(categoryComboBox.SelectedIndex - 1);
-                
-                return result
-                    .Where(a => a.Category.ToString() == Enum.GetName(selectedCategory)).ToList();
+                if (type == "category")
+                {
+                    var selectedProp = (Category)(comboBox.SelectedIndex - 1);
+                    return result
+                        .Where(a => a.Category.ToString() == Enum.GetName(selectedProp)).ToList();
+                }
+                else
+                {
+                    var selectedProp = (GoogleApps.Type)(comboBox.SelectedIndex - 1);
+                    return result
+                        .Where(a => a.Type.ToString() == Enum.GetName(selectedProp)).ToList();
+                }
             }
             return result;
         }
@@ -148,20 +165,57 @@ namespace Google_Apps_Viewer
             }
             return result;
         }
+        private List<GoogleApp> filterByReviews(string minmax)
+        {
+            int minReviews = -1;
+            int maxReviews = -1;
+            List<GoogleApp> result = googleApps;
+            if(minmax == "min")
+            {
+                if (Int32.TryParse(textBoxMinReviews.Text, out minReviews))
+                {
+                    result = result.Where(a => a.Reviews >= minReviews).ToList();
+                    labelMinReviewsError.Visible = false;
+                }
+                else
+                {
+                   labelMinReviewsError.Visible = true;
+                }
+            }
+            if (minmax == "max")
+            {
+                if (Int32.TryParse(textBoxMaxReviews.Text, out maxReviews))
+                {
+                    result = result.Where(a => a.Reviews <= maxReviews).ToList();
+                    labelMaxReviewsError.Visible = false;
+                }
+                else
+                {
+                    labelMaxReviewsError.Visible = true;
+                }
+            }
+            return result;
+        }
 
         private void applyFilters_OnClick(object sender, EventArgs e)
         {
             dataGridView.Rows.Clear();
             filteredApps = googleApps;
 
-            var categories = 
-                (categoryComboBox.SelectedItem != null) ? filterAppsByCategory(): null;    
-            var names = 
+            var categories =
+                (categoryComboBox.SelectedItem != null) ? filterByComboBox("category") : null;
+            var names =
                 (textBoxName.Text.Length > 0) ? filterByNameContains(textBoxName.Text) : null;
-            var ratingsFrom = 
+            var ratingsFrom =
                 (comboBoxRatingFrom.SelectedItem != null) ? filterByRating("from") : null;
             var ratingsTo =
                 (comboBoxRatingTo.SelectedItem != null) ? filterByRating("to") : null;
+            var minReviews =
+                (textBoxMinReviews.Text.Length > 0) ? filterByReviews("min") : null;
+            var maxReviews =
+                (textBoxMaxReviews.Text.Length > 0) ? filterByReviews("max") : null;
+            var types =
+                (comboBoxType.SelectedItem != null) ? filterByComboBox("type") : null;
 
             if (categories != null)
                 filteredApps = categories.Intersect(filteredApps).ToList();
@@ -171,6 +225,16 @@ namespace Google_Apps_Viewer
                 filteredApps = ratingsFrom.Intersect(filteredApps).ToList();
             if (ratingsTo != null)
                 filteredApps = ratingsTo.Intersect(filteredApps).ToList();
+            if (minReviews != null)
+                filteredApps = minReviews.Intersect(filteredApps).ToList();
+            else
+                labelMinReviewsError.Visible = false;
+            if (maxReviews != null)
+                filteredApps = maxReviews.Intersect(filteredApps).ToList();
+            else
+                labelMaxReviewsError.Visible = false;
+            if (types != null)
+                filteredApps = types.Intersect(filteredApps).ToList();
 
             labelRecordsCount.Text = filteredApps.Count.ToString();
             paginatedResults.SetPagination(filteredApps, 15);

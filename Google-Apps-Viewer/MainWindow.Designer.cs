@@ -38,6 +38,14 @@
             this.TypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.splitContainer = new System.Windows.Forms.SplitContainer();
             this.filterPanel = new System.Windows.Forms.Panel();
+            this.comboBoxType = new System.Windows.Forms.ComboBox();
+            this.labelType = new System.Windows.Forms.Label();
+            this.labelMaxReviewsError = new System.Windows.Forms.Label();
+            this.textBoxMaxReviews = new System.Windows.Forms.TextBox();
+            this.labelMinReviewsError = new System.Windows.Forms.Label();
+            this.textBoxMinReviews = new System.Windows.Forms.TextBox();
+            this.labelMaxReviews = new System.Windows.Forms.Label();
+            this.labelReviewsMin = new System.Windows.Forms.Label();
             this.labelPageNumber = new System.Windows.Forms.Label();
             this.buttonPrevPage = new System.Windows.Forms.Button();
             this.buttonNextPage = new System.Windows.Forms.Button();
@@ -140,6 +148,14 @@
             // filterPanel
             // 
             this.filterPanel.BackColor = System.Drawing.Color.LightSteelBlue;
+            this.filterPanel.Controls.Add(this.comboBoxType);
+            this.filterPanel.Controls.Add(this.labelType);
+            this.filterPanel.Controls.Add(this.labelMaxReviewsError);
+            this.filterPanel.Controls.Add(this.textBoxMaxReviews);
+            this.filterPanel.Controls.Add(this.labelMinReviewsError);
+            this.filterPanel.Controls.Add(this.textBoxMinReviews);
+            this.filterPanel.Controls.Add(this.labelMaxReviews);
+            this.filterPanel.Controls.Add(this.labelReviewsMin);
             this.filterPanel.Controls.Add(this.labelPageNumber);
             this.filterPanel.Controls.Add(this.buttonPrevPage);
             this.filterPanel.Controls.Add(this.buttonNextPage);
@@ -159,6 +175,85 @@
             this.filterPanel.Name = "filterPanel";
             this.filterPanel.Size = new System.Drawing.Size(321, 427);
             this.filterPanel.TabIndex = 0;
+            // 
+            // comboBoxType
+            // 
+            this.comboBoxType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBoxType.FormattingEnabled = true;
+            this.comboBoxType.IntegralHeight = false;
+            this.comboBoxType.ItemHeight = 15;
+            this.comboBoxType.Location = new System.Drawing.Point(51, 220);
+            this.comboBoxType.Name = "comboBoxType";
+            this.comboBoxType.Size = new System.Drawing.Size(62, 23);
+            this.comboBoxType.TabIndex = 22;
+            // 
+            // labelType
+            // 
+            this.labelType.AutoSize = true;
+            this.labelType.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelType.Location = new System.Drawing.Point(3, 221);
+            this.labelType.Name = "labelType";
+            this.labelType.Size = new System.Drawing.Size(43, 17);
+            this.labelType.TabIndex = 21;
+            this.labelType.Text = "Type: ";
+            // 
+            // labelMaxReviewsError
+            // 
+            this.labelMaxReviewsError.AutoSize = true;
+            this.labelMaxReviewsError.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelMaxReviewsError.ForeColor = System.Drawing.Color.Red;
+            this.labelMaxReviewsError.Location = new System.Drawing.Point(131, 201);
+            this.labelMaxReviewsError.Name = "labelMaxReviewsError";
+            this.labelMaxReviewsError.Size = new System.Drawing.Size(99, 14);
+            this.labelMaxReviewsError.TabIndex = 20;
+            this.labelMaxReviewsError.Text = "Wrong data format!";
+            // 
+            // textBoxMaxReviews
+            // 
+            this.textBoxMaxReviews.Location = new System.Drawing.Point(131, 176);
+            this.textBoxMaxReviews.MaxLength = 8;
+            this.textBoxMaxReviews.Name = "textBoxMaxReviews";
+            this.textBoxMaxReviews.Size = new System.Drawing.Size(124, 23);
+            this.textBoxMaxReviews.TabIndex = 19;
+            // 
+            // labelMinReviewsError
+            // 
+            this.labelMinReviewsError.AutoSize = true;
+            this.labelMinReviewsError.Font = new System.Drawing.Font("Arial", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.labelMinReviewsError.ForeColor = System.Drawing.Color.Red;
+            this.labelMinReviewsError.Location = new System.Drawing.Point(131, 160);
+            this.labelMinReviewsError.Name = "labelMinReviewsError";
+            this.labelMinReviewsError.Size = new System.Drawing.Size(99, 14);
+            this.labelMinReviewsError.TabIndex = 18;
+            this.labelMinReviewsError.Text = "Wrong data format!";
+            // 
+            // textBoxMinReviews
+            // 
+            this.textBoxMinReviews.Location = new System.Drawing.Point(131, 135);
+            this.textBoxMinReviews.MaxLength = 8;
+            this.textBoxMinReviews.Name = "textBoxMinReviews";
+            this.textBoxMinReviews.Size = new System.Drawing.Size(124, 23);
+            this.textBoxMinReviews.TabIndex = 17;
+            // 
+            // labelMaxReviews
+            // 
+            this.labelMaxReviews.AutoSize = true;
+            this.labelMaxReviews.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelMaxReviews.Location = new System.Drawing.Point(3, 177);
+            this.labelMaxReviews.Name = "labelMaxReviews";
+            this.labelMaxReviews.Size = new System.Drawing.Size(125, 17);
+            this.labelMaxReviews.TabIndex = 16;
+            this.labelMaxReviews.Text = "Maximum reviews: ";
+            // 
+            // labelReviewsMin
+            // 
+            this.labelReviewsMin.AutoSize = true;
+            this.labelReviewsMin.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.labelReviewsMin.Location = new System.Drawing.Point(3, 136);
+            this.labelReviewsMin.Name = "labelReviewsMin";
+            this.labelReviewsMin.Size = new System.Drawing.Size(122, 17);
+            this.labelReviewsMin.TabIndex = 15;
+            this.labelReviewsMin.Text = "Minimum reviews: ";
             // 
             // labelPageNumber
             // 
@@ -214,7 +309,7 @@
             this.comboBoxRatingTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBoxRatingTo.FormattingEnabled = true;
             this.comboBoxRatingTo.IntegralHeight = false;
-            this.comboBoxRatingTo.Location = new System.Drawing.Point(201, 93);
+            this.comboBoxRatingTo.Location = new System.Drawing.Point(201, 98);
             this.comboBoxRatingTo.Name = "comboBoxRatingTo";
             this.comboBoxRatingTo.Size = new System.Drawing.Size(54, 23);
             this.comboBoxRatingTo.TabIndex = 9;
@@ -225,7 +320,7 @@
             this.comboBoxRatingFrom.FormattingEnabled = true;
             this.comboBoxRatingFrom.IntegralHeight = false;
             this.comboBoxRatingFrom.ItemHeight = 15;
-            this.comboBoxRatingFrom.Location = new System.Drawing.Point(94, 93);
+            this.comboBoxRatingFrom.Location = new System.Drawing.Point(94, 98);
             this.comboBoxRatingFrom.Name = "comboBoxRatingFrom";
             this.comboBoxRatingFrom.Size = new System.Drawing.Size(54, 23);
             this.comboBoxRatingFrom.TabIndex = 8;
@@ -234,7 +329,7 @@
             // 
             this.labelRatingTo.AutoSize = true;
             this.labelRatingTo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelRatingTo.Location = new System.Drawing.Point(162, 94);
+            this.labelRatingTo.Location = new System.Drawing.Point(162, 99);
             this.labelRatingTo.Name = "labelRatingTo";
             this.labelRatingTo.Size = new System.Drawing.Size(25, 17);
             this.labelRatingTo.TabIndex = 7;
@@ -244,7 +339,7 @@
             // 
             this.labelRatingFrom.AutoSize = true;
             this.labelRatingFrom.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelRatingFrom.Location = new System.Drawing.Point(3, 94);
+            this.labelRatingFrom.Location = new System.Drawing.Point(3, 99);
             this.labelRatingFrom.Name = "labelRatingFrom";
             this.labelRatingFrom.Size = new System.Drawing.Size(80, 17);
             this.labelRatingFrom.TabIndex = 5;
@@ -252,7 +347,7 @@
             // 
             // textBoxName
             // 
-            this.textBoxName.Location = new System.Drawing.Point(111, 58);
+            this.textBoxName.Location = new System.Drawing.Point(111, 61);
             this.textBoxName.Name = "textBoxName";
             this.textBoxName.Size = new System.Drawing.Size(188, 23);
             this.textBoxName.TabIndex = 4;
@@ -261,7 +356,7 @@
             // 
             this.labelName.AutoSize = true;
             this.labelName.Font = new System.Drawing.Font("Segoe UI Semibold", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.labelName.Location = new System.Drawing.Point(3, 59);
+            this.labelName.Location = new System.Drawing.Point(3, 62);
             this.labelName.Name = "labelName";
             this.labelName.Size = new System.Drawing.Size(102, 17);
             this.labelName.TabIndex = 3;
@@ -340,5 +435,13 @@
         private DataGridViewTextBoxColumn ReviewsCol;
         private DataGridViewTextBoxColumn SizeCol;
         private DataGridViewTextBoxColumn TypeCol;
+        private TextBox textBoxMaxReviews;
+        private Label labelMinReviewsError;
+        private TextBox textBoxMinReviews;
+        private Label labelMaxReviews;
+        private Label labelReviewsMin;
+        private Label labelMaxReviewsError;
+        private ComboBox comboBoxType;
+        private Label labelType;
     }
 }
