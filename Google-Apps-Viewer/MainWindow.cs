@@ -24,7 +24,6 @@ namespace Google_Apps_Viewer
             currentPage = new List<GoogleApp>();
 
             InitializeComponent();
-            InitializeCategoryComboBox();
             InitializeComboBoxes();
             SetPaginationInterface();
             labelMinReviewsError.Visible = false;
@@ -48,6 +47,7 @@ namespace Google_Apps_Viewer
         }
         private void InitializeComboBoxes()
         {
+            InitializeCategoryComboBox();
             comboBoxRatingFrom.Items.Add("");
             comboBoxRatingFrom.Items.Add("1");
             comboBoxRatingFrom.Items.Add("2");
@@ -64,6 +64,10 @@ namespace Google_Apps_Viewer
             comboBoxType.Items.Add("");
             comboBoxType.Items.Add("Free");
             comboBoxType.Items.Add("Paid");
+            comboBoxResultsOnPage.Items.Add("15");
+            comboBoxResultsOnPage.Items.Add("25");
+            comboBoxResultsOnPage.Items.Add("50");
+            comboBoxResultsOnPage.SelectedIndex = 0;
         }
         private void SetPaginationInterface()
         {
@@ -237,7 +241,8 @@ namespace Google_Apps_Viewer
                 filteredApps = types.Intersect(filteredApps).ToList();
 
             labelRecordsCount.Text = filteredApps.Count.ToString();
-            paginatedResults.SetPagination(filteredApps, 15);
+            var selectedRange = Int32.Parse((comboBoxResultsOnPage.GetItemText(comboBoxResultsOnPage.SelectedItem)));
+            paginatedResults.SetPagination(filteredApps, selectedRange);
             bool isPaginated = paginatedResults.IsPaginated();
             if (!isPaginated)
             {
